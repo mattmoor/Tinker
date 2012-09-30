@@ -7,7 +7,7 @@ It can be build using the Visual C++ 2012 toolset via:
 
 A debuggable version with various checking and testing enabled can be built via:
 
-   cl -O2 /Zi main.cpp board.cpp /link /profile /debug
+   cl -Od /Zi main.cpp board.cpp /link /profile /debug
 
 
 
