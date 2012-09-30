@@ -1,7 +1,6 @@
 
 #include "board.h"
 #include <vector>
-#include <intrin.h>
 
 std::vector<char *> boards;
 
@@ -30,7 +29,7 @@ void StartupTest()
 
    size_t start_time = __rdtsc();
 
-   for(auto bi = boards.begin(); bi != boards.end(); bi++)
+   for(std::vector<char*>::iterator bi = boards.begin(); bi != boards.end(); bi++)
    {
       b.Parse(*bi);
       b.Display();

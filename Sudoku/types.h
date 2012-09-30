@@ -10,15 +10,32 @@ typedef unsigned char byte;
 #define SUBSQUARE_SIZE      3
 #define SQUARE_SIZE         9
 #define LOG2_SQUARE_SIZE    4
-#define FULL_MASK           (0xFFFFFFFFui32 >> (31-SQUARE_SIZE))
+#define FULL_MASK           (((unsigned)0xFFFFFFFF) >> (32-SQUARE_SIZE))
 
 #else
 #define SUBSQUARE_SIZE      2
 #define SQUARE_SIZE         4
 #define LOG2_SQUARE_SIZE    3
-#define FULL_MASK           (0xFFFFFFFFui32 >> (31-SQUARE_SIZE))
+#define FULL_MASK           (((unsigned)0xFFFFFFFF) >> (32-SQUARE_SIZE))
 
 #endif
+
+
+#if defined(WINDOWS)
+
+#include <intrin.h>
+
+#else
+
+// QUESTION: How to trigger a debugger break in a *nix environment?
+// QUESTION: Is JIT debugging possible on *nix?
+#define __debugbreak()  exit(-5)
+
+// QUESTION: GCC rdtsc intrinsic?
+#define __rdtsc() 0
+
+#endif
+
 
 #if defined(RELEASE)
 

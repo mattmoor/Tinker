@@ -166,3 +166,12 @@ pip-log.txt
 # Emacs crap
 
 *.*~
+
+# No clue crap
+
+\#*\#
+.\#*
+
+# GCC standard output
+
+a.out

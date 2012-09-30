@@ -4,6 +4,20 @@ It can be built using Visual C++ 2012 via:
 
 	cl -O2 -GL game.cpp
 
+TODO: Check the above still works after getting this working with *nix tools
+
+
+It can be built using Clang 3.0 via:
+
+   clang++ -O2 game.cpp -o game
+
+It can be built via G++ 4.2 (i686-apple-darwin11-llvm-g++-4.2) via:
+
+   g++ -O2 game.cpp -o game
+
+TODO: Get timing/debugging working with *nix tools
+
+
 A typical usage would be:
 
 	game.exe -d dict.txt -p -b a,b,c,d,e,f,g,h,i,j,k,l,m,n,o,p | sort
@@ -43,3 +57,6 @@ Which yields the point-ordered list of words:
 
 
 The ordering is done by "sort" as the words are displayed as they are found.
+
+
+

@@ -192,91 +192,91 @@ public:
 
       virtual uint GetValue(uint variant_dimension)
       {
-         if (this->m_kind == Range::Kind::Row)
+         if (this->m_kind == Row)
          {
             return this->m_board->GetValue(this->m_FD, variant_dimension);
          }
          else
          {
-            assert(this->m_kind == Range::Kind::Column);
+            assert(this->m_kind == Column);
             return this->m_board->GetValue(variant_dimension, this->m_FD);
          }
       }
       
       virtual uint GetMask(uint variant_dimension)
       {
-         if (this->m_kind == Range::Kind::Row)
+         if (this->m_kind == Row)
          {
             return this->m_board->GetMask(this->m_FD, variant_dimension);
          }
          else
          {
-            assert(this->m_kind == Range::Kind::Column);
+            assert(this->m_kind == Column);
             return this->m_board->GetMask(variant_dimension, this->m_FD);
          }
       }
       
       virtual void SetMask(uint variant_dimension, uint mask)
       {
-         if (this->m_kind == Range::Kind::Row)
+         if (this->m_kind == Row)
          {
             this->m_board->SetMask(this->m_FD, variant_dimension, mask);
          }
          else
          {
-            assert(this->m_kind == Range::Kind::Column);
+            assert(this->m_kind == Column);
             this->m_board->SetMask(variant_dimension, this->m_FD, mask);
          }
       }
       
       virtual void SetValue(uint variant_dimension, uint value)
       {
-         if (this->m_kind == Range::Kind::Row)
+         if (this->m_kind == Row)
          {
             this->m_board->SetValue(this->m_FD, variant_dimension, value);
          }
          else
          {
-            assert(this->m_kind == Range::Kind::Column);
+            assert(this->m_kind == Column);
             this->m_board->SetValue(variant_dimension, this->m_FD, value);
          }
       }
 
       virtual void ClearValue(uint variant_dimension)
       {
-         if (this->m_kind == Range::Kind::Row)
+         if (this->m_kind == Row)
          {
             this->m_board->ClearValue(this->m_FD, variant_dimension);
          }
          else
          {
-            assert(this->m_kind == Range::Kind::Column);
+            assert(this->m_kind == Column);
             this->m_board->ClearValue(variant_dimension, this->m_FD);
          }
       }
 
       virtual bool HasValue(uint variant_dimension)
       {
-         if (this->m_kind == Range::Kind::Row)
+         if (this->m_kind == Row)
          {
             return this->m_board->HasValue(this->m_FD, variant_dimension);
          }
          else
          {
-            assert(this->m_kind == Range::Kind::Column);
+            assert(this->m_kind == Column);
             return this->m_board->HasValue(variant_dimension, this->m_FD);
          }
       }
 
       LinearRange GetPerpendicular(uint variant_dimension)
       {
-         if (this->m_kind == Range::Kind::Row)
+         if (this->m_kind == Row)
          {
             return this->m_board->GetColumn(variant_dimension);
          }
          else
          {
-            assert(this->m_kind == Range::Kind::Column);
+            assert(this->m_kind == Column);
             return this->m_board->GetRow(variant_dimension);
          }
       }
@@ -450,14 +450,14 @@ public:
          uint ridx;
          uint cidx;
 
-         if (lr.GetKind() == Range::Kind::Row)
+         if (lr.GetKind() == Row)
          {
             ridx = lr.GetDimension();
             cidx = idx;
          }
          else
          {
-            assert(lr.GetKind() == Range::Kind::Column);
+            assert(lr.GetKind() == Column);
 
             ridx = idx;
             cidx = lr.GetDimension();
@@ -571,7 +571,7 @@ public:
 
       uint GetDimension(Range::Kind kind, uint idx)
       {
-         if (kind == Range::Kind::Row)
+         if (kind == Row)
          {
             return this->m_row + (idx / SUBSQUARE_SIZE);
          }
@@ -640,14 +640,14 @@ public:
 
    LinearRange GetRow(uint row)
    {
-      LinearRange r(this, Range::Kind::Row, row);
+      LinearRange r(this, Range::Row, row);
 
       return r;
    }
 
    LinearRange GetColumn(uint column)
    {
-      LinearRange c(this, Range::Kind::Column, column);
+      LinearRange c(this, Range::Column, column);
 
       return c;
    }

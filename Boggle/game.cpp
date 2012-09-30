@@ -2,10 +2,25 @@
 #include <stdlib.h>
 #include <string.h>
 #include <memory.h>
+
+#if defined(WINDOWS)
+
 #include <intrin.h>
+#define NORETURN __declspec(noreturn)
+
+#else
+
+#define __rdtsc() 0
+#define __debugbreak() exit(-5)
+#define nullptr (const char*)0x0
+#define __int64 long long
+#define NORETURN
+
+#endif
 
 #define islower(c) ('a' <= (c)) && ('z' >= (c))
 #define assert(b) if(!(b)) { __debugbreak(); }
+
 
 #include "trie.h"
 #include "board.h"
@@ -57,7 +72,7 @@ void cleanup()
    delete g_dictionary;
 }
 
-__declspec(noreturn) void usage(char* error, char* error2)
+NORETURN void usage(const char* error, const char* error2)
 {
    if (error2 != nullptr)
    {
@@ -243,7 +258,7 @@ int main(int argc, char** argv)
 
    if (timeMatch)
    {
-      printf("found: %d in %d clocks", found, end-start);
+     printf("found: %d in %d clocks", found, (int)(end-start));
    }
 #endif
    

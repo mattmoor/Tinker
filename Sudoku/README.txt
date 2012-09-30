@@ -1,13 +1,29 @@
 This is a basic sudoku solver written in C++ by Matt Moore.
 
 
-It can be build using the Visual C++ 2012 toolset via:
+It can be built using the Visual C++ 2012 toolset via:
 
-   cl -O2 -GL -DRELEASE#1 main.cpp board.cpp
+   cl -O2 -GL -DRELEASE#1 -DWINDOWS#1 main.cpp board.cpp
 
-A debuggable version with various checking and testing enabled can be built via:
+A debuggable version with various checking and startup-testing enabled can be built via:
 
-   cl -Od /Zi main.cpp board.cpp /link /profile /debug
+   cl -Od /Zi -DWINDOWS#1 main.cpp board.cpp /link /profile /debug
+
+TODO: Verify the above still works with the G++/clang++ fixes complete...
+TODO: Change to output to sudoku.exe, to match *nix style below
+
+
+
+It can be built using GCC 4.2 (i686-apple-darwin11-llvm-gcc-4.2) via:
+
+   g++ -O2 -DRELEASE=1 main.cpp board.cpp -o sudoku
+
+
+It can be built using Clang (clang 3.0) via:
+
+   clang++ -O2 -DRELEASE=1 main.cpp board.cpp -o sudoku
+
+TODO: Support debugging and timing for *nix platforms
 
 
 
