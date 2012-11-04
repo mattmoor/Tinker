@@ -122,9 +122,100 @@ union BOARD_T {
   long bits;
 };
 
-// TODO(mattmoor): iterator over set bits
-
 class BitBoard {
+ public:
+  template <bool VALUE>
+  class bit_iterator {
+  public:
+  bit_iterator(const BitBoard* board)
+    : m_board(board) {
+      this->m_coords.first = 0;
+      this->m_coords.second = -1;
+      // Find the first set bit
+      this->MoveNext();
+    }
+
+    const std::pair<uint32, uint32>& operator*() const {
+      return this->m_coords;
+    }
+
+    const std::pair<uint32, uint32>* operator->() const {
+      return &this->m_coords;
+    }
+
+    bit_iterator& operator++() {
+      this->MoveNext();
+      return *this;
+    }
+    
+    bool operator!=(const bit_iterator& rhs) const {
+      const bit_iterator& lhs = *this;
+      if (lhs.m_board != rhs.m_board) {
+	return true;
+      }
+      if (lhs.m_coords.first != rhs.m_coords.first) {
+	return true;
+      }
+      return lhs.m_coords.second != rhs.m_coords.second;
+    }
+    
+    static bit_iterator End(const BitBoard* board) {
+      bit_iterator iter(board);
+      iter.m_coords.first = 8;
+      iter.m_coords.second = 8;
+      return iter;
+    }
+
+  private:
+    void MoveNext() {
+      const BitBoard& board = *(this->m_board);
+      uint32 row = this->m_coords.first;
+      // Finish this row
+      for (uint32 col = this->m_coords.second+1; col < 8; ++col) {
+	if (board[row][col] == VALUE) {
+	  this->m_coords.first = row;
+	  this->m_coords.second = col;
+	  return;
+	}
+      }
+      // For all other rows, start at the beginning.
+      for (++row; row < 8; ++row) {
+	for (uint32 col = 0; col < 8; ++col) {
+	  if (board[row][col] == VALUE) {
+	    this->m_coords.first = row;
+	    this->m_coords.second = col;
+	    return;
+	  }
+	}
+      }
+      // We didn't find a square, put ourselves in an END state.
+      this->m_coords.first = 8;
+      this->m_coords.second = 8;
+    }
+
+    std::pair<uint32, uint32> m_coords;
+    const BitBoard* m_board;
+  };
+
+  template<bool VALUE>
+  class bit_bucket {
+   public:
+    bit_bucket(const BitBoard* b)
+    : m_board(b) {
+    }
+    
+    bit_iterator<VALUE> begin() const {
+      return bit_iterator<VALUE>(this->m_board);
+    }
+    
+    bit_iterator<VALUE> end() const {
+      return bit_iterator<VALUE>::End(this->m_board);
+    }
+    
+  private:
+    const BitBoard* m_board;
+  };
+
  public:
   BitBoard() {
     *this = 0;
@@ -170,6 +261,14 @@ class BitBoard {
   // TODO(mattmoor): uint64
   operator long() const {
     return this->m_board.bits;
+  }
+
+  bit_bucket<true> SetBits() const {
+    return bit_bucket<true>(this);
+  }
+
+  bit_bucket<false> ClearBits() const {
+    return bit_bucket<false>(this);
   }
 
  private:

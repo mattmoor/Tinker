@@ -88,9 +88,57 @@ void test_BitRow() {
 }
 
 void test_BitBoard_Iterator() {
-  // TODO(mattmoor): test iterator once implemented
+  BitBoard bb;
+  init1(&bb);
 
-  assert(!"NYI");
+  for (const auto pos : bb.SetBits()) {
+    // Check that we are visiting set bits
+    assert(bb[pos.first][pos.second]);
+    // Unset the bit
+    bb[pos.first][pos.second] = false;
+  }
+
+  // Check that we unset all bits
+  assert(bb == 0);
+
+  // Test the same thing again with another bit pattern
+  bb = 12345678910111213;
+
+  for (const auto pos : bb.SetBits()) {
+    // Check that we are visiting set bits
+    assert(bb[pos.first][pos.second]);
+    // Unset the bit
+    bb[pos.first][pos.second] = false;
+  }
+
+  // Check that we unset all bits
+  assert(bb == 0);
+
+  // Now test ClearBits
+  init1(&bb);
+
+  for (const auto pos : bb.ClearBits()) {
+    // Check that we are visiting set bits
+    assert(!bb[pos.first][pos.second]);
+    // Unset the bit
+    bb[pos.first][pos.second] = true;
+  }
+
+  // Check that we unset all bits
+  assert(bb == -1);
+
+  // Test the same thing again with another bit pattern
+  bb = 12345678910111213;
+
+  for (const auto pos : bb.ClearBits()) {
+    // Check that we are visiting set bits
+    assert(!bb[pos.first][pos.second]);
+    // Unset the bit
+    bb[pos.first][pos.second] = true;
+  }
+
+  // Check that we unset all bits
+  assert(bb == -1);
 }
 
 void test_BitBoard() {
@@ -134,11 +182,10 @@ void test_BitBoard() {
   bb1 ^= bb2;
 
   assert(bb1 == 0);
-
-  test_BitBoard_Iterator();
 }
 
 int main() {
   test_BitRow();
   test_BitBoard();
+  test_BitBoard_Iterator();
 }

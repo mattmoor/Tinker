@@ -13,23 +13,23 @@ namespace {
     RealPlayer() : Player(), m_name("User") {
     }
 
-    virtual bool Move(const Othello::Board& b, uint32* row, uint32* col) {
+    virtual bool Move(const Othello::Board& b, uint32* row_, uint32* col_) {
       while(true) {
 	uint32 black, white;
 	bool wtf = !b.Score(&black, &white);
 	assert(wtf);
 
 	// Display the score and board
-	std::cout << "Black: " << black << ", White: " << white 
+	std::cout << "Black: " << black
+		  << ", White: " << white 
 		  << std::endl << b;
 
-	uint32 row_, col_;
-	std::cin >> row_ >> col_;
+	uint32& row = *row_ = 0;
+	uint32& col = *col_ = 0;
+	std::cin >> row >> col;
 
-	if ((row_ < 8) && (col_ < 8)) {
-	  if (b.GetValidMoves()[row_][col_]) {
-	    *row = row_;
-	    *col = col_;
+	if ((row < 8) && (col < 8)) {
+	  if (b.GetValidMoves()[row][col]) {
 	    return false;
 	  } else {
 	    std::cout << "INVALID MOVE!" << std::endl;

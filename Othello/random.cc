@@ -17,21 +17,14 @@ namespace {
       const BitBoard& valid = b.GetValidMoves();
       std::vector<std::pair<uint32, uint32>> moves;
 
-      for (uint32 row = 0; row < 8; ++row) {
-	for (uint32 col = 0; col < 8; ++col) {
-	  if (valid[row][col]) {
-	    moves.push_back(std::make_pair(row, col));
-	  }
-	}
+      for (auto pos : valid.SetBits()) {
+	moves.push_back(pos);
       }
       assert(moves.size() > 0);
       uint32 move = 0xdeadbeef % moves.size();
       assert(move < moves.size());
 
       const std::pair<uint32, uint32> pair = moves[move];
-
-      assert(pair.first < 8);
-      assert(pair.second < 8);
 
       *row = pair.first;
       *col = pair.second;

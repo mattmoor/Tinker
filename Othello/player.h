@@ -16,6 +16,11 @@ class Player {
   // name returns an identifier to glorify or shame the creator of this AI
   virtual const std::string& name() const = 0;
 
+  // Allow players an interface for taunting other players.
+  virtual const std::string taunt(const Player* player) const {
+    return "";
+  }
+
 
   // Some ID assignment logic, with checks to make sure
   // you fucking cheaters play honestly.  YOU MUST INVOKE

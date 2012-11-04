@@ -78,16 +78,18 @@ class TournamentManager {
       uint32 row = 8, col = 8; // assign to invalid values to ensure move
       bool pass = turn->Move(b, &row, &col);
 
+      // TODO(mattmoor): integrate taunting.
+      // TODO(mattmoor): implement passing?  (make sure no pass-passing)
       if (pass) {
 	assert(!"NYI");
       }
 
       assertm((row < 8) && (col < 8), 
-	      turn->name() << " played off board: (" 
-	      << row << "," << col << ")");
+	      turn->name() << " played off board: "
+	      "(" << row << "," << col << ")");
       assertm(b.GetValidMoves()[row][col],
-	      turn->name() << " made an invalid move: (" 
-	      << row << "," << col << ")");
+	      turn->name() << " made an invalid move: "
+	      "(" << row << "," << col << ")");
 
       b.Move(row, col);
     }
@@ -98,8 +100,8 @@ class TournamentManager {
       return;
     }
 
-    Player* winner = (black < white) ? players[1] : players[0];
-    Player* loser = (black > white) ? players[1] : players[0];
+    Player* winner = (black < white) ? players[0] : players[1];
+    Player* loser = (black > white) ? players[0] : players[1];
     std::cout << winner->name() << " beat " << loser->name() << std::endl;
     m_scores[winner->id()]++;
   }

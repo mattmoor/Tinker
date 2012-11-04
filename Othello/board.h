@@ -98,25 +98,15 @@ class Board {
   // white and black scores
   bool Score(uint32* black_, uint32* white_) const {
     // Avoid confusion about operator precedence
-    uint32& black = *black_;
-    uint32& white = *white_;
+    uint32& black = *black_ = 0;
+    uint32& white = *white_ = 0;
 
-    black = 0;
-    white = 0;
+    for (auto pos : this->m_color[Black].SetBits()) {
+      black++;
+    }
 
-    // Walk each row/column and aggregate the number of black
-    // and white squares.
-    for (uint32 row = 0; row < 8; row++) {
-      const BitRow& black_row = this->m_color[Black][row];
-      const BitRow& white_row = this->m_color[White][row];
-
-      for (uint32 col = 0; col < 8; col++) {
-	if (black_row[col]) {
-	  ++black;
-	} else if (white_row[col]) {
-	  ++white;
-	}
-      }
+    for (auto pos : this->m_color[White].SetBits()) {
+      white++;
     }
     // If there are no more moves, then the game is over.
     return (this->m_next_moves == 0);
@@ -125,9 +115,7 @@ class Board {
  protected:
   void BuildNextMoves() {
     // Establish the set of currently occupied squares
-    BitBoard filled_;
-    this->GetFilled(&filled_);
-    const BitBoard& filled = filled_;
+    BitBoard filled; this->GetFilled(&filled);
 
     // Clear out the current set of next_moves
     this->m_next_moves = 0;
@@ -136,14 +124,9 @@ class Board {
     //  - if there is an opposite color adjacent to it and if following that
     //   path leads to a square of our color, then set this square in 
     //   this->m_next_moves
-    for (uint32 row = 0; row < 8; ++row) {
-      const BitRow& f_row = filled[row];
-      for (uint32 col = 0; col < 8; ++col) {
-	if (!f_row[col]) {
-	  if (this->VisitEmptySquare(row, col, NULL)) {
-	    this->m_next_moves[row][col] = true;
-	  }
-	}
+    for (std::pair<uint32, uint32> pos : filled.ClearBits()) {
+      if (this->VisitEmptySquare(pos.first, pos.second, NULL)) {
+	this->m_next_moves[pos.first][pos.second] = true;
       }
     }
 
