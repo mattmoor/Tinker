@@ -83,9 +83,9 @@
     <ClInclude Include="types.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="random.cc" />
     <ClCompile Include="tournament.cc" />
     <ClCompile Include="user-player.cc" />
+    <ClCompile Include="random.cc" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

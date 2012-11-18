@@ -78,6 +78,13 @@
   <ItemGroup>
     <ClCompile Include="bit-board.cc" />
   </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="bit-board.h" />
+    <ClInclude Include="board.h" />
+    <ClInclude Include="player.h" />
+    <ClInclude Include="tournament.h" />
+    <ClInclude Include="types.h" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>
