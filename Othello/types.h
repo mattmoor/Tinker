@@ -10,14 +10,30 @@ typedef unsigned int64 uint64;
 */
 typedef int            int32;
 typedef unsigned       uint32;
+#if defined(_MSC_VER)
+typedef __int64        int64;
+typedef unsigned __int64 uint64;
+#else
+typedef long           int64;
+typedef unsigned long uint64;
+#endif
 
 #include <iostream>
+
+#if defined(_MSC_VER)
+#define FAIL() \
+		__debugbreak(); \
+	    exit(1)
+#else
+#define FAIL() \
+	    exit(1)
+#endif
 
 #define assert(B) \
   if (!(B)) { \
     std::cerr << "ASSERTION FAILED(" << __FILE__ \
 	      << ":" << __LINE__ << "): " << #B << std::endl;	\
-    exit(1); \
+	FAIL(); \
   }
 
 #define assertm(B, m) \
@@ -25,7 +41,7 @@ typedef unsigned       uint32;
     std::cerr << "ASSERTION FAILED(" << __FILE__ \
 	      << ":" << __LINE__ << "): " << #B << std::endl;	\
     std::cerr << m << std::endl;			\
-    exit(1); \
+	FAIL(); \
   }
 
 

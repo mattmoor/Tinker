@@ -119,7 +119,7 @@ class BitRow {
 
 union BOARD_T {
   BitRow rows[8];
-  long bits;
+  uint64 bits;
 };
 
 class BitBoard {
@@ -254,12 +254,11 @@ class BitBoard {
     return *this;
   }
 
-  void operator=(long value) {
+  void operator=(uint64 value) {
     this->m_board.bits = value;
   }
 
-  // TODO(mattmoor): uint64
-  operator long() const {
+  operator uint64() const {
     return this->m_board.bits;
   }
 

@@ -185,6 +185,11 @@ void test_BitBoard() {
 }
 
 int main() {
+  assert(sizeof(uint64) == 8);
+  assert(sizeof(uint32) == 4);
+  assert(sizeof(BitRow) == 1);
+  assert(sizeof(BitBoard) == 8);
+  assert(sizeof(BOARD_T) == 8);
   test_BitRow();
   test_BitBoard();
   test_BitBoard_Iterator();
