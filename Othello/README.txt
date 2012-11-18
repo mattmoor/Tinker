@@ -8,3 +8,5 @@ It can be build with Clang via:
 
 
 Consult "random.cc" and "user-player.cc" for how to properly set up a player.
+
+NOTE: tournament.cc MUST come first as compilers must dynamically initialize the tournament manager before players.
