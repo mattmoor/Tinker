@@ -194,7 +194,10 @@ class Board {
   BitBoard m_color[2];
   BitBoard m_next_moves;
   Color    m_turn;
-  DISABLE_COPY(Board);
+
+  // TODO(mattmoor): We have to allow this (now that the basic framework has
+  // been validated) so that players can fork the board for searching.
+  //DISABLE_COPY(Board);
 
  private:
   // TODO(mattmoor): Implement a release mode with this disabled.

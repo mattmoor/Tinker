@@ -113,6 +113,8 @@ class BitRow {
  private:
   byte m_row;
 
+  // TODO(mattmoor): We have to allow this (now that the basic framework has
+  // been validated) so that players can fork the board for searching.
   // TODO(mattmoor): make this work with union...
   //DISABLE_COPY(BitRow)
 };
@@ -272,7 +274,10 @@ class BitBoard {
 
  private:
   BOARD_T m_board;
-  DISABLE_COPY(BitBoard);
+
+  // TODO(mattmoor): We have to allow this (now that the basic framework has
+  // been validated) so that players can fork the board for searching.
+  //DISABLE_COPY(BitBoard);
 };
 
 inline std::ostream& operator<<(std::ostream& out, const BitRow& br) {

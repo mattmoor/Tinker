@@ -103,6 +103,7 @@ class TournamentManager {
     Player* winner = (black < white) ? players[0] : players[1];
     Player* loser = (black > white) ? players[0] : players[1];
     std::cout << winner->name() << " beat " << loser->name() << std::endl;
+    std::cout << "Final Board: " << b;
     m_scores[winner->id()]++;
   }
 
