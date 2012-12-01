@@ -5,13 +5,27 @@
 #include <map>
 #include <string>
 #include <vector>
+#include <memory>
 
 #include "types.h"
 #include "player.h"
 
+using std::shared_ptr;
+
 class TournamentManager {
  public:
-  void RegisterPlayer(Player* player) {
+  virtual ~TournamentManager() {
+    in_shutdown_ = true;
+    Reset();
+  }
+
+  void BeQuiet() {
+    be_quiet_ = true;
+  }
+
+  void Reset();
+
+  void RegisterPlayer(shared_ptr<Player>& player) {
     uint32 id = AssignID();
     m_players.push_back(player);
     m_ids.push_back(id);
@@ -22,14 +36,16 @@ class TournamentManager {
 
   void RunTournament() {
     // List entrants
-    std::cout << "Entrants: " << std::endl;
-    for (const Player* player : m_players) {
-      std::cout << player->name() << std::endl;
+    if (!be_quiet_) {
+      std::cout << "Entrants: " << std::endl;
+      for (const auto& player : m_players) {
+	std::cout << player->name() << std::endl;
+      }
+      std::cout << std::endl;
     }
-    std::cout << std::endl;
 
     if (m_players.size() < 2) {
-      std::cout << "Insufficient players to mount tournament" << std::endl;
+      std::cerr << "Insufficient players to mount tournament" << std::endl;
       return;
     }
 
@@ -37,11 +53,11 @@ class TournamentManager {
     this->CheckIDs();
 
     // Have each entrant play each other, with color decided by a coin toss.
-    for (Player* player1 : m_players) {
-      for (Player* player2 : m_players) {
-	if (player1 != player2) {
-	  PlayGame(player1, player2);
-	}
+    for (uint32 i = 0; i < m_players.size(); ++i) {
+      const auto& player1 = m_players[i];
+      for (uint32 j = i + 1; j < m_players.size(); ++j) {
+	const auto& player2 = m_players[j];
+	PlayGame(player1.get(), player2.get());
       }
     }
 
@@ -53,15 +69,22 @@ class TournamentManager {
     // std::sort
 
     // Display the scores
-    std::cout << "Entrants: " << std::endl;
-    for (const Player* player : m_players) {
-      std::cout << player->name() << " : " << (m_scores[player->id()]) << std::endl;
+    if (!be_quiet_) {
+      std::cout << "Entrants: " << std::endl;
+      for (const auto& player : m_players) {
+	std::cout << player->name() << " : " << score(player.get()) << std::endl;
+      }
+      std::cout << std::endl;
     }
-    std::cout << std::endl;
+  }
+
+  // TODO(mattmoor): Why doesn't std::map have a const overload of operator[]?
+  uint32 score(const Player* player) {
+    return m_scores[player->id()];
   }
 
  private:
-  std::vector<Player*> m_players;
+  std::vector<std::shared_ptr<Player>> m_players;
   std::map<uint32, uint32> m_scores;
 
   void PlayGame(Player* p1_, Player* p2_) {
@@ -97,18 +120,26 @@ class TournamentManager {
     if (black == white) {
       // TODO(mattmoor): Decide whether this should count as a victory 
       // for both players or not.
+      players[0]->NotifyTie();
+      players[1]->NotifyTie();
       return;
     }
 
     Player* winner = (black < white) ? players[0] : players[1];
     Player* loser = (black > white) ? players[0] : players[1];
-    std::cout << winner->name() << " beat " << loser->name() << std::endl;
-    std::cout << "Final Board: " << b;
+    if (!be_quiet_) {
+      std::cout << winner->name() << " beat " << loser->name() << std::endl;
+      std::cout << "Final Board: " << b;
+    }
     m_scores[winner->id()]++;
+
+    // Notify the winners, so at DTOR time, they know their record.
+    winner->NotifyWinner();
+    loser->NotifyLoser();
   }
 
   bool CoinFlip() {
-    return (this->AssignID() & 1) != 0;
+    return (rand() & 1) != 0;
   }
 
   // For checking IDs
@@ -124,15 +155,17 @@ class TournamentManager {
 
   uint32 AssignID() {
     static uint32 g_ID = 0;
-    // TODO(mattmoor): random ID assignment
     return ++g_ID;
   }
 
   // Only allow setting up the one static manager
   DISABLE_COPY(TournamentManager);
-  TournamentManager() {
+ TournamentManager() : be_quiet_(false), in_shutdown_(false) {
     ;
   }
+
+  bool be_quiet_;
+  bool in_shutdown_;
 
  public:
   static TournamentManager g_manager;
@@ -144,7 +177,8 @@ class TournamentManager {
     class P ## Registrar {						\
     public:								\
       P ## Registrar() {						\
-	TournamentManager::g_manager.RegisterPlayer(new P());		\
+	shared_ptr<Player> p(new P());					\
+	TournamentManager::g_manager.RegisterPlayer(p);			\
       }									\
     } __ ## P ## Registrar;  /* Create an instance of the Registrar*/	\
   }  // namespace

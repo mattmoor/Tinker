@@ -21,7 +21,7 @@ namespace {
 	moves.push_back(pos);
       }
       assert(moves.size() > 0);
-      uint32 move = 0xdeadbeef % moves.size();
+      uint32 move = rand() % moves.size();
       assert(move < moves.size());
 
       const std::pair<uint32, uint32> pair = moves[move];

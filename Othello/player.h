@@ -5,8 +5,12 @@
 
 #include "board.h"
 
+class TournamentManager;
+
 class Player {
  public:
+  friend class TournamentManager;
+
   // The public interface for players to implement
 
   // Move returns whether to pass without moving, otherwise it initializes
@@ -21,17 +25,36 @@ class Player {
     return "";
   }
 
+  virtual ~Player() {}
+
+  // Track record internally, so we know how well we did when we are torn
+  // down.
+  void NotifyWinner() {
+    ++m_wins;
+  }
+  int wins() const {
+    return m_wins;
+  }
+
+  void NotifyLoser() {
+    ++m_losses;
+  }
+  int losses() const {
+    return m_losses;
+  }
+
+  void NotifyTie() {
+    ++m_ties;
+  }
+  int ties() const {
+    return m_ties;
+  }
+
 
   // Some ID assignment logic, with checks to make sure
   // you fucking cheaters play honestly.  YOU MUST INVOKE
   // THIS CTOR TO AVOID ASSERTIONS
-  Player() : m_id(0) {
-  }
-
-  void AssignID(uint32 id) {
-    assertm(this->m_id == 0, 
-	    "You forgot to invoke the base ctor, or you are cheating");
-    this->m_id = id;
+  Player() : m_id(0), m_wins(0), m_losses(0), m_ties(0) {
   }
 
   uint32 id() const {
@@ -39,7 +62,16 @@ class Player {
   }
 
  private:
+  void AssignID(uint32 id) {
+    //assertm(this->m_id == 0, 
+    //        "You forgot to invoke the base ctor, or you are cheating");
+    this->m_id = id;
+  }
+
   uint32 m_id;
+  uint32 m_wins;
+  uint32 m_losses;
+  uint32 m_ties;
 };
 
 #endif  // _PLAYER_H_
