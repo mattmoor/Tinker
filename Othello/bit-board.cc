@@ -1,5 +1,7 @@
 #include "bit-board.h"
 
+break the build
+
 // BitRow and BitBoard unit testing
 
 void init1(BitRow* br) {
