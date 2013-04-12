@@ -124,6 +124,8 @@ union BOARD_T {
   uint64 bits;
 };
 
+typedef std::pair<uint32, uint32> Position;
+
 class BitBoard {
  public:
   template <bool VALUE>
@@ -137,11 +139,11 @@ class BitBoard {
       this->MoveNext();
     }
 
-    const std::pair<uint32, uint32>& operator*() const {
+    const Position& operator*() const {
       return this->m_coords;
     }
 
-    const std::pair<uint32, uint32>* operator->() const {
+    const Position* operator->() const {
       return &this->m_coords;
     }
 
@@ -195,7 +197,7 @@ class BitBoard {
       this->m_coords.second = 8;
     }
 
-    std::pair<uint32, uint32> m_coords;
+    Position m_coords;
     const BitBoard* m_board;
   };
 

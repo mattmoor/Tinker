@@ -16,7 +16,6 @@ namespace OTHELLO_GOD {
 
   typedef std::pair<uint32, uint32> BoardValue;
   typedef std::pair<uint64, uint64> BoardState;
-  typedef std::pair<uint32, uint32> Position;
 #define BLACK first
 #define WHITE second
 #define ROW first
@@ -160,7 +159,7 @@ namespace OTHELLO_GOD {
       // TODO(mattmoor): We should have all of the data to perform a
       // negamax search instead of minimax with alpha-beta pruning.
 
-      BitBoard& moves = my_board.GetValidMoves();
+      const BitBoard& moves = my_board.GetValidMoves();
 
       // TODO(mattmoor): Killer heuristic
       // NOTE: consider caching the prior "killer" move when iteratively
@@ -187,8 +186,12 @@ namespace OTHELLO_GOD {
       //   In practice, the move ordering is often determined by the results of
       //   earlier, smaller searches, such as through iterative deepening.
 
-      std::vector<Position> vmoves(moves.SetBits().begin(),
-				   moves.SetBits().end());
+      auto set_bits = moves.SetBits();
+
+      std::vector<Position> vmoves;
+      for (const Position& pos : set_bits) {
+	vmoves.push_back(pos);
+      }
 
       // TODO(mattmoor): Sort the moves here based on knowledge from previous
       // depths.
