@@ -94,6 +94,11 @@ class Board {
     return this->m_turn;
   }
 
+  bool game_over() const {
+    // If there are no more moves, then the game is over.
+    return (this->m_next_moves == 0);
+  }
+
   // Return whether the game is over and the 
   // white and black scores
   bool Score(uint32* black_, uint32* white_) const {
@@ -108,8 +113,7 @@ class Board {
     for (auto pos : this->m_color[White].SetBits()) {
       white++;
     }
-    // If there are no more moves, then the game is over.
-    return (this->m_next_moves == 0);
+    return game_over();
   }
 
  protected:
