@@ -2,6 +2,8 @@
 
 // BitRow and BitBoard unit testing
 
+asdf
+
 void init1(BitRow* br) {
   *br = 0;
   BitRow& br_ = *br;
