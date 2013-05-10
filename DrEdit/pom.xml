@@ -61,8 +61,6 @@
       <artifactId>google-http-client</artifactId>
       <version>${appengine.target.version}</version>
     </dependency>
-
-    <!-- another random comment -->
     <dependency>
       <groupId>com.google.http-client</groupId>
       <artifactId>google-http-client-gson</artifactId>
